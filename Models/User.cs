@@ -13,7 +13,7 @@ namespace MyLoginApi.Models
 
         public string LastName { get; set; } 
 
-        public string Roles { get; set; }
+        
 
     }
 }

@@ -26,6 +26,7 @@ namespace MyLoginApi.Controllers
         }
 
 
+
         [HttpGet]
         
         public async Task<IEnumerable<User>> GetUser() => await context.Users.ToListAsync();
@@ -60,7 +61,8 @@ namespace MyLoginApi.Controllers
 
 
         [HttpPost("Validate")]
-        [Authorize (Roles = "Admin")]
+        //For Role Based Authorization
+        //[Authorize (Roles = "Admin")]
         public async Task<IActionResult> Validate([FromBody] User users)
         {
             var userdetail = context.Users.FirstOrDefault(u => u.Username == users.Username && u.Password == users.Password);

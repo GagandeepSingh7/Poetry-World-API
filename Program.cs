@@ -3,6 +3,8 @@ using MyLoginApi.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,31 +12,44 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
- 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+// If you want to enable roles you can uncomment these 
 
-    .AddJwtBearer(options =>
+//builder.Services.AddSwaggerGen(options =>
+//{
+//    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+//    {
+//        Description = "Standard Authorization header using the Beared Scheme",
+//        In = ParameterLocation.Header,
+//        Name = "Authorization",
+//        Type = SecuritySchemeType.ApiKey
+//    });
+//    options.OperationFilter<SecurityRequirementsOperationFilter>();
+//});
 
-    {
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
-        options.TokenValidationParameters = new TokenValidationParameters
+//    .AddJwtBearer(options =>
 
-        {
+//    {
 
-            ValidateIssuerSigningKey = true,
+//        options.TokenValidationParameters = new TokenValidationParameters
 
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+//        {
 
-                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+//            ValidateIssuerSigningKey = true,
 
-            ValidateIssuer = false,
+//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
 
-            ValidateAudience = false
+//                .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
 
-        };
+//            ValidateIssuer = false,
 
-    }); 
+//            ValidateAudience = false
+
+//        };
+
+//    }); 
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -51,7 +66,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
