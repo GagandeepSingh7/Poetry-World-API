@@ -27,7 +27,7 @@ namespace MyLoginApi.Controllers
 
 
         [HttpGet]
-        [Authorize (Roles = "Admin")]
+        
         public async Task<IEnumerable<User>> GetUser() => await context.Users.ToListAsync();
 
 
@@ -36,6 +36,7 @@ namespace MyLoginApi.Controllers
        
 
         [HttpPost("Register")]
+        [Authorize (Roles = "Admin")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
             string hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
