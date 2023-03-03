@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj": {}
+    "C:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj": {
+    "C:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj",
+        "projectUniqueName": "C:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj",
         "projectName": "MyLoginApi",
-        "projectPath": "c:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj",
+        "projectPath": "C:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj",
         "packagesPath": "C:\\Users\\gagan\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\gagan\\source\\repos\\MyLoginApi\\obj\\",
+        "outputPath": "C:\\Users\\gagan\\source\\repos\\MyLoginApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\gagan\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -48,21 +48,29 @@
               "target": "Package",
               "version": "[6.4.4, )"
             },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.3, )"
+              "version": "[6.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "target": "Package",
-              "version": "[7.0.3, )"
+              "version": "[6.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[7.0.3, )"
+              "version": "[6.0.14, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
-              "version": "[7.0.3, )"
+              "version": "[6.0.14, )"
+            },
+            "Microsoft.IdentityModel.Tokens": {
+              "target": "Package",
+              "version": "[6.27.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

@@ -36,7 +36,7 @@ namespace MyLoginApi.Controllers
        
 
         [HttpPost("Register")]
-        [Authorize (Roles = "Admin")]
+        
         public async Task<IActionResult> Register([FromBody] User user)
         {
             string hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
@@ -60,6 +60,7 @@ namespace MyLoginApi.Controllers
 
 
         [HttpPost("Validate")]
+        [Authorize (Roles = "Admin")]
         public async Task<IActionResult> Validate([FromBody] User users)
         {
             var userdetail = context.Users.FirstOrDefault(u => u.Username == users.Username && u.Password == users.Password);
@@ -73,22 +74,42 @@ namespace MyLoginApi.Controllers
 
         private string CreateToken(User user)
         {
-            List<Claim> claims = new List<Claim>();
+            List<Claim> claims = new()
+
             {
-                new Claim(ClaimTypes.Name, user.Username);
+
+                new Claim(ClaimTypes.Name, user.Username),
+
+                new Claim(ClaimTypes.Role, "Admin")
+
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                configuration.GetSection("AppSettings:Token").Value!));
+
+ 
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+
+                configuration.GetSection("AppSettings:Token").Value));
+
+ 
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
+ 
 
             var token = new JwtSecurityToken(
+
                 claims: claims,
+
                 expires: DateTime.Now.AddDays(1),
+
                 signingCredentials: creds);
 
+ 
+
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+ 
+
             return jwt;
         }
 
