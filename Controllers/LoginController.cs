@@ -33,12 +33,12 @@ namespace MyLoginApi.Controllers
 
 
 
-       
-       
+
+
 
         [HttpPost("Register")]
-        
-        public async Task<IActionResult> Register([FromBody] User user)
+
+        public async Task<IActionResult> Registernormal ([FromBody] User user)
         {
             string hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             var newuser = new User
@@ -63,7 +63,7 @@ namespace MyLoginApi.Controllers
         [HttpPost("Validate")]
         //For Role Based Authorization
         //[Authorize (Roles = "Admin")]
-        public async Task<IActionResult> Validate([FromBody] User users)
+        public async Task<IActionResult> Validatenormal([FromBody] User users)
         {
             var userdetail = context.Users.FirstOrDefault(u => u.Username == users.Username && u.Password == users.Password);
             string token = CreateToken(users);

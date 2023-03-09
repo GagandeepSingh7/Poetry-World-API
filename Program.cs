@@ -5,13 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using MyLoginApi.Services.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // If you want to enable roles you can uncomment these 
 
@@ -54,7 +55,10 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });                
+    });
 builder.Services.AddDbContext<UserContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("String")));
 var app = builder.Build();
 
@@ -62,7 +66,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    });
 }
 
 app.UseHttpsRedirection();
