@@ -7,6 +7,8 @@ using MyLoginApi.Models;
 using MyLoginApi.Services.EmailService;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication;
+using System.Text;
+using NuGet.Common;
 
 namespace VerifyEmailForgotPassword.Controllers
 {
@@ -50,7 +52,7 @@ namespace VerifyEmailForgotPassword.Controllers
             var user1 = new ResetPasswordRequest
             {
                 
-                Token="",
+                Token = Guid.NewGuid().ToString(),
                 Password = request.Password,
                 ConfirmPassword = request.Password
 
@@ -61,7 +63,7 @@ namespace VerifyEmailForgotPassword.Controllers
             await context.SaveChangesAsync();
             return Ok(user);
         }
-
+        
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
@@ -72,19 +74,9 @@ namespace VerifyEmailForgotPassword.Controllers
 
             }
         }
-        private void CreateTokenHash(string Token, out byte[] TokenHash, out byte[] TokenSalt)
-        {
-            Token = Guid.NewGuid().ToString();
-            
-            using (var hmac = new HMACSHA512())
-            {
-                TokenSalt = hmac.Key;
-                TokenHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Token));
-
-            }
-        }
         
-    private string CreateRandomToken()
+        
+        private string CreateRandomToken()
         {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
