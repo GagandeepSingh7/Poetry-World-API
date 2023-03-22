@@ -40,6 +40,10 @@ namespace MyLoginApi.Controllers
 
         public async Task<IActionResult> Registernormal ([FromBody] User user)
         {
+            if (context.Users.Any(m => m.Username == user.Username))
+            {
+                return BadRequest("UserAlreadyExists");
+            }
             string hash = BCrypt.Net.BCrypt.HashPassword(user.Password);
             var newuser = new User
             {

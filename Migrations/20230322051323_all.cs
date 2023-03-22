@@ -4,7 +4,7 @@
 
 namespace MyLoginApi.Migrations
 {
-    public partial class usertable1 : Migration
+    public partial class all : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

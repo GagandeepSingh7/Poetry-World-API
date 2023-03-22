@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MEJ3bMKK0Go3SbR1phELtNvR3q/0zJG/OC7K0M5neAVt21rc4YXyFquPWAPBF+jNjImkc3/mniNjxTBddSe4Hw==",
+  "dgSpecHash": "V5295CECOzcILXAVTzDnNP8bpNhCnXKDJv+6i3j1UsBqb/v71q0n/hom9GQOyKZ92d94p+qgfBPX7wADp3KItw==",
   "success": true,
   "projectFilePath": "C:\\Users\\gagan\\source\\repos\\MyLoginApi\\MyLoginApi.csproj",
   "expectedPackageFiles": [
@@ -192,11 +192,7 @@
     "C:\\Users\\gagan\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\gagan\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
     "C:\\Users\\gagan\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
-    "C:\\Users\\gagan\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\gagan\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.14\\microsoft.windowsdesktop.app.ref.6.0.14.nupkg.sha512",
-    "C:\\Users\\gagan\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.14\\microsoft.netcore.app.ref.6.0.14.nupkg.sha512",
-    "C:\\Users\\gagan\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.14\\microsoft.aspnetcore.app.ref.6.0.14.nupkg.sha512",
-    "C:\\Users\\gagan\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.14\\microsoft.netcore.app.host.win-x64.6.0.14.nupkg.sha512"
+    "C:\\Users\\gagan\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }

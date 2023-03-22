@@ -5,6 +5,7 @@ namespace MyLoginApi.Models
     public class ResetPasswordRequest
     {
         [Required]
+        [Key]
         public string Token { get; set; }
         [Required, MinLength(6)]
         public string Password { get; set; }

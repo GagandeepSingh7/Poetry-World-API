@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyLoginApi.Data;
 using MyLoginApi.Models;
+using MyLoginApi.Services.EmailService;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication;
 
 namespace VerifyEmailForgotPassword.Controllers
 {
@@ -13,17 +15,23 @@ namespace VerifyEmailForgotPassword.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserContext context;
+        private readonly IEmailService emailService;
 
-        public UserController(UserContext context)
+        public UserController(UserContext context, IEmailService emailService)
         {
             this.context = context;
+            this.emailService = emailService;
         }
 
 
+        [HttpGet("details")]
+
+        public async Task<IEnumerable<Client>> GetUser() => await context.clients.ToListAsync();
+
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] UserRegisterRequest request)
         {
-            if (context.Clients.Any(u => u.Email==request.Email))
+            if (context.clients.Any(u => u.Username==request.Username))
             {
                 return BadRequest("User Already Exists");
             }
@@ -33,26 +41,50 @@ namespace VerifyEmailForgotPassword.Controllers
 
             var user = new Client
             { 
-                Email = request.Email,
+                Username = request.Username,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                VerificationToken=CreateRandomToken()
+                VerificationToken= Guid.NewGuid().ToString()
+
             };
-            context.Clients.Add(user);
+            var user1 = new ResetPasswordRequest
+            {
+                
+                Token="",
+                Password = request.Password,
+                ConfirmPassword = request.Password
+
+
+            };
+            context.request.Add(user1);
+            context.clients.Add(user);
             await context.SaveChangesAsync();
             return Ok(user);
         }
-        
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) 
+
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+
             }
         }
+        private void CreateTokenHash(string Token, out byte[] TokenHash, out byte[] TokenSalt)
+        {
+            Token = Guid.NewGuid().ToString();
+            
+            using (var hmac = new HMACSHA512())
+            {
+                TokenSalt = hmac.Key;
+                TokenHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Token));
 
-        private string CreateRandomToken()
+            }
+        }
+        
+    private string CreateRandomToken()
         {
             return Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
         }
@@ -71,53 +103,56 @@ namespace VerifyEmailForgotPassword.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginRequest request)
         {
-            var user = await context.Clients.FirstOrDefaultAsync(u => u.Email == request.Email);
+            
+            var user = await context.clients.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (user == null)
             {
-                return BadRequest("User not found");
-            }
-            if (user.VerifiedAt == null)
-            {
-                return BadRequest("Not Verified");
+                return BadRequest("User not found.");
             }
 
             if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return BadRequest("Password is In correct");
-            }
-            return Ok($"Welcome Back ,{user.Email}! :)");
-
-        }
-        
-        
-        [HttpPost("verify")]
-        public async Task<IActionResult> Verify(string token)
-        {
-            var user = await context.Clients.FirstOrDefaultAsync(u => u.VerificationToken == token);
-            if (user == null)
-            {
-                return BadRequest("InValid ");
+                return BadRequest("Password is incorrect.");
             }
 
-            user.VerifiedAt = DateTime.Now;
-            await context.SaveChangesAsync();
-            return Ok("User Verified");
+            //if (user.VerifiedAt == null)
+            //{
+            //    return BadRequest("Not verified!");
+            //}
 
+            return Ok($"Welcome back, {user.Username}! :)");
         }
-        
-        
-        
+
+
+        // [HttpPost("verify")]
+        // public async Task<IActionResult> Verify(string token)
+        // {
+        //     var user = await context.Clients.FirstOrDefaultAsync(u => u.VerificationToken == token);
+        //     if (user == null)
+        //     {
+        //         return BadRequest("InValid ");
+        //     }
+        //
+        //     user.VerifiedAt = DateTime.Now;
+        //     await context.SaveChangesAsync();
+        //     return Ok("User Verified");
+        //
+        // }
+        //
+        //
+
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword( EmailDto request)
         {
-            var user = await context.Clients.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await context.clients.FirstOrDefaultAsync(u => u.Username == request.To);
             if (user == null)
             {
                 return BadRequest("InValid ");
             }
-
+            
             user.PasswordResetToken = CreateRandomToken();
             user.ResetTokenExpires = DateTime.Now.AddDays(1);
+            emailService.SendEmail(request);
             await context.SaveChangesAsync();
             return Ok("You may now reset your password");
 
@@ -127,11 +162,13 @@ namespace VerifyEmailForgotPassword.Controllers
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
         {
-            var user = await context.Clients.FirstOrDefaultAsync(u => u.PasswordResetToken == request.Token);
-            if (user == null || user.ResetTokenExpires < DateTime.Now)
+            
+            var user = await context.clients.FirstOrDefaultAsync(u => u.VerificationToken == request.Token);
+            if (user == null)
             {
                 return BadRequest("InValid Token ");
             }
+            
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash=passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -142,5 +179,22 @@ namespace VerifyEmailForgotPassword.Controllers
             return Ok("Password Successfully Reset !");
 
         }
+
+        [HttpDelete]
+
+        public async Task<IActionResult> RemoveUser(string Username)
+        {
+            var user = await context.clients.FirstOrDefaultAsync(o=>o.Username==Username);
+            if (user == null)   
+            {
+                return BadRequest("Invalid Request");
+            }
+
+            context.clients.Remove(user);
+            await context.SaveChangesAsync();
+            return Ok();
+
+        }
+
     }
 }

@@ -11,8 +11,15 @@ namespace MyLoginApi.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Client> clients { get; set; }
 
+        public DbSet<UserRegisterRequest> userregister { get; set; }
+
+        public DbSet<UserLoginRequest>  LoginRequests { get; set; }
+
+        public DbSet<EmailDto> dto { get; set; }
+
+        public DbSet<ResetPasswordRequest>  request { get; set; }
 
         
     }
