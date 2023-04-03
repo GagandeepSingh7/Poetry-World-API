@@ -28,7 +28,7 @@ namespace MyLoginApi.Services.EmailService
             
                 string token = context.clients.First(x => x.Username == request.To).VerificationToken;
 
-                string resetUrl = $"https://localhost:44302/ResetPassword/ResetPassword?token={token}";
+                string resetUrl = $"https://localhost:7088/ResetPassword/ResetPassword?token={token}";
             
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(configuration.GetSection("EmailUsername").Value));
