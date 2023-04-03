@@ -75,6 +75,27 @@ namespace MyLoginApi.Migrations
                     b.ToTable("dto");
                 });
 
+            modelBuilder.Entity("MyLoginApi.Models.Poem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("PoemDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PoemTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Poems");
+                });
+
             modelBuilder.Entity("MyLoginApi.Models.ResetPasswordRequest", b =>
                 {
                     b.Property<string>("Token")

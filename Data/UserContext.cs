@@ -20,6 +20,8 @@ namespace MyLoginApi.Data
         public DbSet<EmailDto> dto { get; set; }
 
         public DbSet<ResetPasswordRequest>  request { get; set; }
+        
+        public DbSet<Poem>  Poems { get; set; }
 
         
     }
