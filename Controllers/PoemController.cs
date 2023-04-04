@@ -26,23 +26,23 @@ namespace MyLoginApi.Controllers
             {
                 return BadRequest("Poem Already Exists");
             }
-            
+
             var poems = new Poem
             {
                 PoemTitle = poem.PoemTitle,
-                PoemDescription = poem.PoemDescription,                
+                PoemDescription = poem.PoemDescription,
             };
-            
-            
+
+
             context.Poems.Add(poem);
             await context.SaveChangesAsync();
             return Ok(poem);
         }
 
         [HttpDelete("poem-delete")]
-        public async Task<IActionResult> Poem(int Id)
+        public async Task<IActionResult> PoemDelete(int id)
         {
-            var user = await context.Poems.FirstOrDefaultAsync(o => o.Id == Id);
+            var user = await context.Poems.FirstOrDefaultAsync(o => o.Id == id);
             if (user == null) 
             {
                 return BadRequest("Poem Doesn't exist");
