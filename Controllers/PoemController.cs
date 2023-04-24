@@ -51,5 +51,24 @@ namespace MyLoginApi.Controllers
             context.SaveChanges();
             return Ok(user);
         }
+
+        
+       [HttpPatch("poem-edit")]
+        public async Task<IActionResult> PoemEdit(Poem poem, int id)
+        {
+            var user = await context.Poems.FirstOrDefaultAsync(o => o.Id == id);
+            if (user == null)
+            {
+                return BadRequest("Poem doesn't exist");
+            }
+            else
+            {
+                user.PoemTitle = poem.PoemTitle;
+                user.PoemDescription = poem.PoemDescription;
+            }
+            context.SaveChanges();
+            return Ok(user);
+        }
+
     }
 }

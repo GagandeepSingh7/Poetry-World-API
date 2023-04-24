@@ -31,8 +31,7 @@ namespace MyLoginApi.Controllers
         
         public async Task<IEnumerable<User>> GetUser() => await context.Users.ToListAsync();
 
-
-
+        
 
 
 
